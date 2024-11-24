@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import type { FC, ReactNode } from "react";
 import { Provider } from "~/components/ui/provider";
@@ -11,6 +11,10 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
 	title: "Fukurou",
+};
+
+export const viewport: Viewport = {
+	userScalable: false,
 };
 
 type RootLayoutProps = Readonly<{
