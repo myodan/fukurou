@@ -1,0 +1,149 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  aession       Session[]
+  account       Account[]
+
+  role       String?
+  banned     Boolean?
+  banReason  String?
+  banExpires DateTime?
+
+  comment     Comment[]
+  viewHistory ViewHistory[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model Webtoon {
+  id           Int           @id @default(autoincrement())
+  title        String
+  synopsis     String
+  thumbnailUrl String
+  daysOfWeek   String[]
+  isAdult      Boolean       @default(false)
+  isFinished   Boolean       @default(false)
+  episodes     Episode[]
+  viewHistory  ViewHistory[]
+  tags         Tag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("webtoon")
+}
+
+model Episode {
+  id            Int      @id @default(autoincrement())
+  episodeNumber Int
+  thumbnailUrl  String
+  subtitle      String
+  contents      String[]
+  webtoonId     Int
+  webtoon       Webtoon  @relation(fields: [webtoonId], references: [id])
+
+  comments    Comment[]
+  viewHistory ViewHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("episode")
+}
+
+model ViewHistory {
+  id        Int      @id @default(autoincrement())
+  webtoonId Int
+  webtoon   Webtoon  @relation(fields: [webtoonId], references: [id])
+  episodeId Int
+  episode   Episode  @relation(fields: [episodeId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  viewedAt  DateTime @default(now())
+
+  @@unique([episodeId, userId])
+  @@index([webtoonId, userId])
+  @@map("view_histories")
+}
+
+model Comment {
+  id        Int     @id @default(autoincrement())
+  userId    String
+  episodeId Int
+  content   String
+  user      User    @relation(fields: [userId], references: [id])
+  episode   Episode @relation(fields: [episodeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comment")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  webtoons Webtoon[]
+}
