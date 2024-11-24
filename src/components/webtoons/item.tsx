@@ -1,4 +1,4 @@
-import { Flex, Image, Text } from "@chakra-ui/react";
+import { Image, Stack, Text } from "@chakra-ui/react";
 import type { Webtoon } from "@prisma/client";
 import NextImage from "next/image";
 import NextLink from "next/link";
@@ -11,8 +11,8 @@ type Props = Readonly<{
 export const WebtoonListItem: FC<Props> = ({ webtoon }) => {
 	return (
 		<NextLink href={`/webtoons/${webtoon.id}`} passHref>
-			<Flex flexDirection="column" gap="1">
-				<Flex
+			<Stack>
+				<Stack
 					position="relative"
 					aspectRatio={3 / 4}
 					rounded="md"
@@ -21,11 +21,11 @@ export const WebtoonListItem: FC<Props> = ({ webtoon }) => {
 					<Image objectFit="cover" asChild>
 						<NextImage src={webtoon.thumbnailUrl} alt={webtoon.title} fill />
 					</Image>
-				</Flex>
+				</Stack>
 				<Text textAlign={"center"} lineClamp={1}>
 					{webtoon.title}
 				</Text>
-			</Flex>
+			</Stack>
 		</NextLink>
 	);
 };
