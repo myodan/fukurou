@@ -1,7 +1,7 @@
 "use client";
 
 import { HStack, Stack, StackSeparator, Text } from "@chakra-ui/react";
-import type { FC } from "react";
+import { type FC, useState } from "react";
 import { signOut } from "~/actions/auth.action";
 import type { Session } from "~/lib/auth";
 import { ColorModeSegment } from "../color-mode-segment";
@@ -21,10 +21,12 @@ type UserMenuProps = Readonly<{
 }>;
 
 export const UserMenu: FC<UserMenuProps> = ({ session }) => {
+	const [open, setOpen] = useState(false);
+
 	return (
 		<HStack>
 			{session ? (
-				<PopoverRoot>
+				<PopoverRoot open={open} onOpenChange={({ open }) => setOpen(open)}>
 					<PopoverTrigger>
 						<Avatar src={session.user.image || undefined} shape="rounded" />
 					</PopoverTrigger>
@@ -47,6 +49,28 @@ export const UserMenu: FC<UserMenuProps> = ({ session }) => {
 										로그아웃
 									</Button>
 								</HStack>
+								<Stack>
+									<LinkButton
+										href="/my"
+										variant="ghost"
+										size="sm"
+										justifyContent="start"
+										paddingX="2"
+										onClick={() => setOpen(false)}
+									>
+										마이페이지
+									</LinkButton>
+									<LinkButton
+										href="/account"
+										variant="ghost"
+										size="sm"
+										justifyContent="start"
+										paddingX="2"
+										onClick={() => setOpen(false)}
+									>
+										계정
+									</LinkButton>
+								</Stack>
 								<HStack justifyContent="space-between">
 									<Text paddingX="2" paddingY="1">
 										테마

@@ -17,7 +17,11 @@ export const getRecentlyViewedWebtoons = actionClient
 			},
 			distinct: ["webtoonId"],
 			include: {
-				webtoon: true,
+				webtoon: {
+					include: {
+						tags: true,
+					},
+				},
 				episode: true,
 			},
 			orderBy: {
