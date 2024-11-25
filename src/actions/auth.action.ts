@@ -26,6 +26,11 @@ export const signUp = actionClient
 			body: parsedInput,
 		});
 
+		await auth.api.sendVerificationEmail({
+			headers: await headers(),
+			body: parsedInput,
+		});
+
 		redirect("/");
 	});
 
