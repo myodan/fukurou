@@ -82,6 +82,7 @@ model Webtoon {
   synopsis     String
   thumbnailUrl String
   daysOfWeek   String[]
+  totalView    Int           @default(0)
   isAdult      Boolean       @default(false)
   isFinished   Boolean       @default(false)
   episodes     Episode[]
@@ -100,6 +101,7 @@ model Episode {
   thumbnailUrl  String
   subtitle      String
   contents      String[]
+  view          Int      @default(0)
   webtoonId     Int
   webtoon       Webtoon  @relation(fields: [webtoonId], references: [id])
 
