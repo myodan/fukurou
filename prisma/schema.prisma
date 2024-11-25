@@ -111,6 +111,7 @@ model Episode {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([webtoonId, episodeNumber])
   @@map("episode")
 }
 
