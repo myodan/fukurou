@@ -10,7 +10,10 @@ type Props = Readonly<{
 
 export const EpisodeListItem: FC<Props> = ({ episode }) => {
 	return (
-		<NextLink href={`/episodes/${episode.id}`} passHref>
+		<NextLink
+			href={`/webtoons/${episode.webtoonId}/${episode.episodeNumber}`}
+			passHref
+		>
 			<Flex
 				gap="4"
 				padding="2"
