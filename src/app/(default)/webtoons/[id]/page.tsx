@@ -2,9 +2,10 @@ import { Button, Flex, Stack } from "@chakra-ui/react";
 import { notFound } from "next/navigation";
 import type { FC } from "react";
 import { LuPlus } from "react-icons/lu";
+import { getEpisodeByWebtoonId } from "~/actions/episode.action";
+import { getWebtoonWithTags } from "~/actions/webtoons.action";
 import { EpisodeList } from "~/components/episodes/list";
 import { WebtoonDetail } from "~/components/webtoons/detail";
-import { prisma } from "~/lib/prisma";
 
 type Props = Readonly<{
 	params: Promise<{ id: string }>;
@@ -13,18 +14,12 @@ type Props = Readonly<{
 const WebtoonPage: FC<Props> = async ({ params }) => {
 	const { id } = await params;
 
-	const webtoon = await prisma.webtoon.findUnique({
-		where: { id: +id },
-		include: { tags: true },
-	});
+	const webtoon = await getWebtoonWithTags({ webtoonId: +id });
+	const episdoes = await getEpisodeByWebtoonId({ webtoonId: +id });
 
-	if (!webtoon) {
+	if (!webtoon || !episdoes) {
 		return notFound();
 	}
-
-	const episdoes = await prisma.episode.findMany({
-		where: { webtoonId: +id },
-	});
 
 	return (
 		<Stack gap="4">

@@ -1,8 +1,8 @@
-import { Text } from "@chakra-ui/react";
 import type { FC } from "react";
+import { LinkButton } from "~/components/ui/link-button";
 
 const RootPage: FC = async () => {
-	return <Text>Root</Text>;
+	return <LinkButton href="/webtoons">웹툰</LinkButton>;
 };
 
 export default RootPage;

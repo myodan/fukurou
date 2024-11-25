@@ -34,10 +34,10 @@ export const signUp = actionClient
 		redirect("/");
 	});
 
-export const signOut = actionClient.action(async () => {
+export const signOut = async () => {
 	await auth.api.signOut({ headers: await headers() });
-});
+};
 
 export const getSession = async () => {
-	return await auth.api.getSession({ headers: await headers() });
+	return auth.api.getSession({ headers: await headers() });
 };

@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import NextImage from "next/image";
 import NextLink from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import type { FC } from "react";
 import { getSession } from "~/actions/auth.action";
 import { getRecentlyViewHistories } from "~/actions/view-histories.action";
@@ -25,25 +25,19 @@ const MyPage: FC = async () => {
 		return redirect("/sign-in");
 	}
 
-	const response = await getRecentlyViewHistories({
+	const recentlyViewHistories = await getRecentlyViewHistories({
 		userId: session.user.id,
 	});
-
-	if (!response?.data) {
-		return notFound();
-	}
-
-	const viewHistories = response.data;
 
 	return (
 		<Stack separator={<StackSeparator />}>
 			<HStack justifyContent="space-between">
 				<Heading>최근 본 웹툰</Heading>
 				<Text color="fg.muted">
-					총 <FormatNumber value={viewHistories.length} />개
+					총 <FormatNumber value={recentlyViewHistories.length} />개
 				</Text>
 			</HStack>
-			<For each={viewHistories}>
+			<For each={recentlyViewHistories}>
 				{(viewHistory) => (
 					<HStack gap="4" alignItems="stretch">
 						<NextLink href={`/webtoons/${viewHistory.webtoon.id}`} passHref>

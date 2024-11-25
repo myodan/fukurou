@@ -1,10 +1,15 @@
 import { FormatNumber, HStack, Heading, Stack, Text } from "@chakra-ui/react";
+import { notFound } from "next/navigation";
 import type { FC } from "react";
+import { getWebtoons } from "~/actions/webtoons.action";
 import { WebtoonList } from "~/components/webtoons/list";
-import { prisma } from "~/lib/prisma";
 
 const WebtoonsPage: FC = async () => {
-	const webtoons = await prisma.webtoon.findMany();
+	const webtoons = await getWebtoons();
+
+	if (!webtoons) {
+		return notFound();
+	}
 
 	return (
 		<Stack gap="4">

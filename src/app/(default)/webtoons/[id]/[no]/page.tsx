@@ -15,16 +15,14 @@ type WebtoonEpisdoePageProps = Readonly<{
 const WebtoonEpisdoePage: FC<WebtoonEpisdoePageProps> = async ({ params }) => {
 	const { id, no } = await params;
 
-	const response = await getEpisodeByWebtoonIdAndEpisodeNumber({
+	const episode = await getEpisodeByWebtoonIdAndEpisodeNumber({
 		webtoonId: +id,
 		episodeNumber: +no,
 	});
 
-	if (!response?.data) {
+	if (!episode) {
 		return notFound();
 	}
-
-	const episode = response.data;
 
 	return (
 		<Stack>
@@ -63,7 +61,7 @@ const WebtoonEpisdoePage: FC<WebtoonEpisdoePageProps> = async ({ params }) => {
 				</LinkButton>
 			</HStack>
 
-			<Stack>TODO: 댓글</Stack>
+			{/* TODO: 댓글 */}
 		</Stack>
 	);
 };

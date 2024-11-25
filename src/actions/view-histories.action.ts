@@ -1,58 +1,48 @@
 "use server";
 
-import { z } from "zod";
 import { prisma } from "~/lib/prisma";
-import { actionClient } from "~/lib/safe-action";
 
-export const getRecentlyViewHistories = actionClient
-	.schema(
-		z.object({
-			userId: z.string(),
-		}),
-	)
-	.action(async ({ parsedInput: { userId } }) => {
-		return await prisma.viewHistory.findMany({
-			where: {
-				userId,
-			},
-			distinct: ["webtoonId"],
-			include: {
-				webtoon: {
-					include: {
-						tags: true,
-					},
+export const getRecentlyViewHistories = async ({
+	userId,
+}: { userId: string }) => {
+	return prisma.viewHistory.findMany({
+		where: {
+			userId,
+		},
+		distinct: ["webtoonId"],
+		include: {
+			webtoon: {
+				include: {
+					tags: true,
 				},
-				episode: true,
 			},
-			orderBy: {
-				viewedAt: "desc",
-			},
-		});
+			episode: true,
+		},
+		orderBy: {
+			viewedAt: "desc",
+		},
 	});
+};
 
-export const getRecentlyViewHistoryByWebtoonId = actionClient
-	.schema(
-		z.object({
-			userId: z.string(),
-			webtoonId: z.number(),
-		}),
-	)
-	.action(async ({ parsedInput: { userId, webtoonId } }) => {
-		return await prisma.viewHistory.findMany({
-			where: {
-				AND: [{ userId }, { webtoonId }],
-			},
-			distinct: ["webtoonId"],
-			include: {
-				webtoon: {
-					include: {
-						tags: true,
-					},
+export const getRecentlyViewHistoryByWebtoonId = async ({
+	userId,
+	webtoonId,
+}: { userId: string; webtoonId: number }) => {
+	return prisma.viewHistory.findMany({
+		where: {
+			AND: [{ userId }, { webtoonId }],
+		},
+		distinct: ["webtoonId"],
+		include: {
+			webtoon: {
+				include: {
+					tags: true,
 				},
-				episode: true,
 			},
-			orderBy: {
-				viewedAt: "desc",
-			},
-		});
+			episode: true,
+		},
+		orderBy: {
+			viewedAt: "desc",
+		},
 	});
+};
