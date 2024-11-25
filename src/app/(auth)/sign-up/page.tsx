@@ -25,8 +25,11 @@ const SignUpPage: FC = () => {
 			onSuccess: () => {
 				toaster.success({ title: "회원가입 성공" });
 			},
-			onError: () => {
-				toaster.error({ title: "회원가입 실패" });
+			onError: ({ error }) => {
+				toaster.error({
+					title: "회원가입 실패",
+					description: error.serverError,
+				});
 			},
 		},
 	});

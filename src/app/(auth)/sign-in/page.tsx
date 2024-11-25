@@ -26,8 +26,8 @@ const SignInPage: FC = () => {
 			onSuccess: () => {
 				toaster.success({ title: "로그인 성공" });
 			},
-			onError: () => {
-				toaster.error({ title: "로그인 실패" });
+			onError: ({ error }) => {
+				toaster.error({ title: "로그인 실패", description: error.serverError });
 			},
 		},
 	});
