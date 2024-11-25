@@ -15,14 +15,18 @@ type Props = Readonly<{
 
 export const WebtoonDetail: FC<Props> = ({ webtoon }) => {
 	return (
-		<Flex minHeight="64" gap="4">
-			<Flex height="64" aspectRatio={3 / 4} position="relative">
+		<Flex minHeight={{ base: "48", md: "64" }} gap="4">
+			<Flex
+				height={{ base: "48", md: "64" }}
+				aspectRatio={3 / 4}
+				position="relative"
+			>
 				<Image rounded="md" objectFit="cover" asChild>
 					<NextImage src={webtoon.thumbnailUrl} alt="thumbnail" fill />
 				</Image>
 			</Flex>
 			<Flex flexDirection="column" gap="2" flexGrow="1">
-				<Heading>{webtoon.title}</Heading>
+				<Heading lineClamp="1">{webtoon.title}</Heading>
 				<Text whiteSpace="pre-wrap">{webtoon.synopsis}</Text>
 				<HStack gap="1" flexWrap="wrap">
 					<For each={webtoon.tags}>
