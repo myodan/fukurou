@@ -20,15 +20,17 @@ const WebtoonsPage: FC<WebtoonsPageProps> = async ({ searchParams }) => {
 	const tags = (await searchParams).tags?.split(",");
 
 	const webtoons = await prisma.webtoon.findMany({
-		where: {
-			tags: {
-				some: {
-					name: {
-						in: tags,
+		...(tags && {
+			where: {
+				tags: {
+					some: {
+						name: {
+							in: tags,
+						},
 					},
 				},
 			},
-		},
+		}),
 		include: {
 			tags: true,
 		},
