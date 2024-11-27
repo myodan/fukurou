@@ -1,4 +1,11 @@
-import { FormatNumber, HStack, Heading, Stack, Text } from "@chakra-ui/react";
+import {
+	FormatNumber,
+	HStack,
+	Heading,
+	Stack,
+	StackSeparator,
+	Text,
+} from "@chakra-ui/react";
 import { notFound } from "next/navigation";
 import type { FC } from "react";
 import { getWebtoons } from "~/actions/webtoons.action";
@@ -12,7 +19,7 @@ const WebtoonsPage: FC = async () => {
 	}
 
 	return (
-		<Stack gap="4">
+		<Stack separator={<StackSeparator />}>
 			<HStack justifyContent="space-between">
 				<Heading>전체 웹툰</Heading>
 				<Text color="fg.muted">
