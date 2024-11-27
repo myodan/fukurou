@@ -1,11 +1,15 @@
 "use server";
 
+import type { Prisma } from "@prisma/client";
+import type { DefaultArgs } from "@prisma/client/runtime/library";
 import { notFound } from "next/navigation";
 import { prisma } from "~/lib/prisma";
 import { getSession } from "./auth.action";
 
-export const getWebtoons = async () => {
-	return prisma.webtoon.findMany();
+export const getWebtoons = async (
+	args?: Prisma.WebtoonFindManyArgs<DefaultArgs>,
+) => {
+	return prisma.webtoon.findMany(args);
 };
 
 export const getWebtoonWithTags = async ({

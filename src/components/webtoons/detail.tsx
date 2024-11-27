@@ -31,7 +31,13 @@ export const WebtoonDetail: FC<Props> = ({ webtoon }) => {
 				<HStack gap="1" flexWrap="wrap">
 					<For each={webtoon.tags}>
 						{(tag) => (
-							<NextLink href={`/tags/${tag.id}`} passHref>
+							<NextLink
+								href={{
+									pathname: "/webtoons",
+									search: `?tag=${tag.name}`,
+								}}
+								passHref
+							>
 								<Tag key={tag.id}>{tag.name}</Tag>
 							</NextLink>
 						)}

@@ -71,7 +71,13 @@ const MyPage: FC = async () => {
 								<HStack hideBelow="md" flexWrap="wrap">
 									<For each={viewHistory.webtoon.tags}>
 										{(tag) => (
-											<NextLink href={`/tags/${tag.id}`} passHref>
+											<NextLink
+												href={{
+													pathname: "/webtoons",
+													search: `?tag=${tag.name}`,
+												}}
+												passHref
+											>
 												<Tag key={tag.id}>{tag.name}</Tag>
 											</NextLink>
 										)}

@@ -81,7 +81,7 @@ model Webtoon {
   title        String
   synopsis     String
   thumbnailUrl String
-  daysOfWeek   String[]
+  daysOfWeek   Int[]
   totalView    Int           @default(0)
   isAdult      Boolean       @default(false)
   isFinished   Boolean       @default(false)
@@ -127,7 +127,7 @@ model ViewHistory {
 
   @@unique([episodeId, userId])
   @@index([webtoonId, userId])
-  @@map("view_histories")
+  @@map("view_history")
 }
 
 model Comment {
@@ -149,4 +149,6 @@ model Tag {
   name String @unique
 
   webtoons Webtoon[]
+
+  @@map("tag")
 }

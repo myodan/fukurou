@@ -67,7 +67,8 @@ CREATE TABLE "webtoon" (
     "title" TEXT NOT NULL,
     "synopsis" TEXT NOT NULL,
     "thumbnailUrl" TEXT NOT NULL,
-    "daysOfWeek" TEXT[],
+    "daysOfWeek" INTEGER[],
+    "totalView" INTEGER NOT NULL DEFAULT 0,
     "isAdult" BOOLEAN NOT NULL DEFAULT false,
     "isFinished" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -83,6 +84,7 @@ CREATE TABLE "episode" (
     "thumbnailUrl" TEXT NOT NULL,
     "subtitle" TEXT NOT NULL,
     "contents" TEXT[],
+    "view" INTEGER NOT NULL DEFAULT 0,
     "webtoonId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -91,14 +93,14 @@ CREATE TABLE "episode" (
 );
 
 -- CreateTable
-CREATE TABLE "view_histories" (
+CREATE TABLE "view_history" (
     "id" SERIAL NOT NULL,
     "webtoonId" INTEGER NOT NULL,
     "episodeId" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "viewedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "view_histories_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "view_history_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -114,11 +116,11 @@ CREATE TABLE "comment" (
 );
 
 -- CreateTable
-CREATE TABLE "Tag" (
+CREATE TABLE "tag" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
 
-    CONSTRAINT "Tag_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tag_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -134,13 +136,16 @@ CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 CREATE UNIQUE INDEX "session_token_key" ON "session"("token");
 
 -- CreateIndex
-CREATE INDEX "view_histories_webtoonId_userId_idx" ON "view_histories"("webtoonId", "userId");
+CREATE UNIQUE INDEX "episode_webtoonId_episodeNumber_key" ON "episode"("webtoonId", "episodeNumber");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "view_histories_episodeId_userId_key" ON "view_histories"("episodeId", "userId");
+CREATE INDEX "view_history_webtoonId_userId_idx" ON "view_history"("webtoonId", "userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name");
+CREATE UNIQUE INDEX "view_history_episodeId_userId_key" ON "view_history"("episodeId", "userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "tag_name_key" ON "tag"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_TagToWebtoon_AB_unique" ON "_TagToWebtoon"("A", "B");
@@ -158,13 +163,13 @@ ALTER TABLE "account" ADD CONSTRAINT "account_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "episode" ADD CONSTRAINT "episode_webtoonId_fkey" FOREIGN KEY ("webtoonId") REFERENCES "webtoon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "view_histories" ADD CONSTRAINT "view_histories_webtoonId_fkey" FOREIGN KEY ("webtoonId") REFERENCES "webtoon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "view_history" ADD CONSTRAINT "view_history_webtoonId_fkey" FOREIGN KEY ("webtoonId") REFERENCES "webtoon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "view_histories" ADD CONSTRAINT "view_histories_episodeId_fkey" FOREIGN KEY ("episodeId") REFERENCES "episode"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "view_history" ADD CONSTRAINT "view_history_episodeId_fkey" FOREIGN KEY ("episodeId") REFERENCES "episode"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "view_histories" ADD CONSTRAINT "view_histories_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "view_history" ADD CONSTRAINT "view_history_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "comment" ADD CONSTRAINT "comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -173,7 +178,7 @@ ALTER TABLE "comment" ADD CONSTRAINT "comment_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "comment" ADD CONSTRAINT "comment_episodeId_fkey" FOREIGN KEY ("episodeId") REFERENCES "episode"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_TagToWebtoon" ADD CONSTRAINT "_TagToWebtoon_A_fkey" FOREIGN KEY ("A") REFERENCES "Tag"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_TagToWebtoon" ADD CONSTRAINT "_TagToWebtoon_A_fkey" FOREIGN KEY ("A") REFERENCES "tag"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_TagToWebtoon" ADD CONSTRAINT "_TagToWebtoon_B_fkey" FOREIGN KEY ("B") REFERENCES "webtoon"("id") ON DELETE CASCADE ON UPDATE CASCADE;

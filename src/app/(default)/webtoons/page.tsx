@@ -6,17 +6,36 @@ import {
 	StackSeparator,
 	Text,
 } from "@chakra-ui/react";
-import { notFound } from "next/navigation";
 import type { FC } from "react";
-import { getWebtoons } from "~/actions/webtoons.action";
 import { WebtoonList } from "~/components/webtoons/list";
+import { prisma } from "~/lib/prisma";
 
-const WebtoonsPage: FC = async () => {
-	const webtoons = await getWebtoons();
+type WebtoonsPageProps = {
+	searchParams: Promise<{
+		tags?: string;
+	}>;
+};
 
-	if (!webtoons) {
-		return notFound();
-	}
+const WebtoonsPage: FC<WebtoonsPageProps> = async ({ searchParams }) => {
+	const tags = (await searchParams).tags?.split(",");
+
+	const webtoons = await prisma.webtoon.findMany({
+		where: {
+			tags: {
+				some: {
+					name: {
+						in: tags,
+					},
+				},
+			},
+		},
+		include: {
+			tags: true,
+		},
+		orderBy: {
+			totalView: "desc",
+		},
+	});
 
 	return (
 		<Stack separator={<StackSeparator />}>
