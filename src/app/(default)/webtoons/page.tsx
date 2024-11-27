@@ -42,7 +42,8 @@ const WebtoonsPage: FC<WebtoonsPageProps> = async ({ searchParams }) => {
 	return (
 		<Stack separator={<StackSeparator />}>
 			<HStack justifyContent="space-between">
-				<Heading>전체 웹툰</Heading>
+				{!tags && <Heading>전체 웹툰</Heading>}
+				{tags && <Heading>{tags.join(", ")} 웹툰</Heading>}
 				<Text color="fg.muted">
 					총 <FormatNumber value={webtoons.length} />개
 				</Text>
