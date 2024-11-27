@@ -74,7 +74,7 @@ const MyPage: FC = async () => {
 											<NextLink
 												href={{
 													pathname: "/webtoons",
-													search: `?tag=${tag.name}`,
+													search: `?tags=${tag.name}`,
 												}}
 												passHref
 											>

@@ -34,7 +34,7 @@ export const WebtoonDetail: FC<Props> = ({ webtoon }) => {
 							<NextLink
 								href={{
 									pathname: "/webtoons",
-									search: `?tag=${tag.name}`,
+									search: `?tags=${tag.name}`,
 								}}
 								passHref
 							>
