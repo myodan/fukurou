@@ -1,7 +1,7 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import type { FC } from "react";
 
-const WebtoonsLoadingPage: FC = () => {
+const DefaultLoadingPage: FC = () => {
 	return (
 		<Center>
 			<Spinner size="xl" />
@@ -9,4 +9,4 @@ const WebtoonsLoadingPage: FC = () => {
 	);
 };
 
-export default WebtoonsLoadingPage;
+export default DefaultLoadingPage;
