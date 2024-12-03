@@ -1,7 +1,6 @@
 import { Flex, For, HStack, Heading, Image, Text } from "@chakra-ui/react";
 import type { Prisma } from "@prisma/client";
 import NextImage from "next/image";
-import NextLink from "next/link";
 import type { FC } from "react";
 import { Tag } from "../ui/tag";
 
@@ -30,17 +29,7 @@ export const WebtoonDetail: FC<Props> = ({ webtoon }) => {
 				<Text whiteSpace="pre-wrap">{webtoon.synopsis}</Text>
 				<HStack gap="1" flexWrap="wrap">
 					<For each={webtoon.tags}>
-						{(tag) => (
-							<NextLink
-								href={{
-									pathname: "/webtoons",
-									search: `?tags=${tag.name}`,
-								}}
-								passHref
-							>
-								<Tag key={tag.id}>{tag.name}</Tag>
-							</NextLink>
-						)}
+						{(tag) => <Tag key={tag.id}>{tag.name}</Tag>}
 					</For>
 				</HStack>
 			</Flex>

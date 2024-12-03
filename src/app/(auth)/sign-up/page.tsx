@@ -6,7 +6,7 @@ import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hoo
 import NextLink from "next/link";
 import type { FC } from "react";
 import { signUp } from "~/actions/auth.action";
-import { Logo } from "~/components/common/logo";
+import { LogoWithLink } from "~/components/common/logo";
 import { Button } from "~/components/ui/button";
 import { Field } from "~/components/ui/field";
 import { PasswordInput } from "~/components/ui/password-input";
@@ -42,7 +42,7 @@ const SignUpPage: FC = () => {
 			marginX="auto"
 			onSubmit={handleSubmitWithAction}
 		>
-			<Logo />
+			<LogoWithLink />
 			<Stack gap="4">
 				<Field
 					label="이메일"

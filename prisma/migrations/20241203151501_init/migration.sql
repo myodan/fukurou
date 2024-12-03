@@ -5,12 +5,12 @@ CREATE TABLE "user" (
     "email" TEXT NOT NULL,
     "emailVerified" BOOLEAN NOT NULL,
     "image" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "role" TEXT,
     "banned" BOOLEAN,
     "banReason" TEXT,
     "banExpires" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
@@ -20,12 +20,12 @@ CREATE TABLE "session" (
     "id" TEXT NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
     "token" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "ipAddress" TEXT,
     "userAgent" TEXT,
-    "userId" TEXT NOT NULL,
     "impersonatedBy" TEXT,
+    "userId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "session_pkey" PRIMARY KEY ("id")
 );
@@ -35,7 +35,6 @@ CREATE TABLE "account" (
     "id" TEXT NOT NULL,
     "accountId" TEXT NOT NULL,
     "providerId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
     "accessToken" TEXT,
     "refreshToken" TEXT,
     "idToken" TEXT,
@@ -43,6 +42,7 @@ CREATE TABLE "account" (
     "refreshTokenExpiresAt" TIMESTAMP(3),
     "scope" TEXT,
     "password" TEXT,
+    "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -68,7 +68,6 @@ CREATE TABLE "webtoon" (
     "synopsis" TEXT NOT NULL,
     "thumbnailUrl" TEXT NOT NULL,
     "daysOfWeek" INTEGER[],
-    "totalView" INTEGER NOT NULL DEFAULT 0,
     "isAdult" BOOLEAN NOT NULL DEFAULT false,
     "isFinished" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -84,7 +83,6 @@ CREATE TABLE "episode" (
     "thumbnailUrl" TEXT NOT NULL,
     "subtitle" TEXT NOT NULL,
     "contents" TEXT[],
-    "view" INTEGER NOT NULL DEFAULT 0,
     "webtoonId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -95,10 +93,10 @@ CREATE TABLE "episode" (
 -- CreateTable
 CREATE TABLE "view_history" (
     "id" SERIAL NOT NULL,
+    "viewedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "webtoonId" INTEGER NOT NULL,
     "episodeId" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
-    "viewedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "view_history_pkey" PRIMARY KEY ("id")
 );
@@ -106,9 +104,9 @@ CREATE TABLE "view_history" (
 -- CreateTable
 CREATE TABLE "comment" (
     "id" SERIAL NOT NULL,
+    "content" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "episodeId" INTEGER NOT NULL,
-    "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -126,7 +124,9 @@ CREATE TABLE "tag" (
 -- CreateTable
 CREATE TABLE "_TagToWebtoon" (
     "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
+    "B" INTEGER NOT NULL,
+
+    CONSTRAINT "_TagToWebtoon_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
@@ -146,9 +146,6 @@ CREATE UNIQUE INDEX "view_history_episodeId_userId_key" ON "view_history"("episo
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tag_name_key" ON "tag"("name");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_TagToWebtoon_AB_unique" ON "_TagToWebtoon"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_TagToWebtoon_B_index" ON "_TagToWebtoon"("B");

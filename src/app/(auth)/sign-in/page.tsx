@@ -6,9 +6,8 @@ import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hoo
 import NextLink from "next/link";
 import type { FC } from "react";
 import { signIn } from "~/actions/auth.action";
-import { Logo } from "~/components/common/logo";
+import { LogoWithLink } from "~/components/common/logo";
 import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
 import { Field } from "~/components/ui/field";
 import { PasswordInput } from "~/components/ui/password-input";
 import { toaster } from "~/components/ui/toaster";
@@ -26,8 +25,8 @@ const SignInPage: FC = () => {
 			onSuccess: () => {
 				toaster.success({ title: "로그인 성공" });
 			},
-			onError: ({ error }) => {
-				toaster.error({ title: "로그인 실패", description: error.serverError });
+			onError: () => {
+				toaster.error({ title: "로그인 실패" });
 			},
 		},
 	});
@@ -40,7 +39,7 @@ const SignInPage: FC = () => {
 			marginX="auto"
 			onSubmit={handleSubmitWithAction}
 		>
-			<Logo />
+			<LogoWithLink />
 			<Stack gap="4">
 				<Field
 					label="이메일"
@@ -57,8 +56,7 @@ const SignInPage: FC = () => {
 					<PasswordInput {...register("password")} />
 				</Field>
 			</Stack>
-			<HStack justifyContent="space-between">
-				<Checkbox>자동 로그인</Checkbox>
+			<HStack justifyContent="end">
 				<Link textStyle="sm" asChild>
 					<NextLink href="/forget-password">비밀번호를 잊으셨나요?</NextLink>
 				</Link>

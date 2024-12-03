@@ -1,3 +1,4 @@
+import { Center } from "@chakra-ui/react";
 import NextLink from "next/link";
 import type { FC, SVGProps } from "react";
 
@@ -20,7 +21,9 @@ export const Logo: FC<LogoProps> = (props) => (
 );
 
 export const LogoWithLink: FC<LogoProps> = (props) => (
-	<NextLink href="/" aria-label="logo-link" passHref>
-		<Logo {...props} />
-	</NextLink>
+	<Center>
+		<NextLink href="/" aria-label="logo-link" passHref>
+			<Logo {...props} />
+		</NextLink>
+	</Center>
 );
